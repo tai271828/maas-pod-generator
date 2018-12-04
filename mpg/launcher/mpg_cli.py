@@ -1,14 +1,10 @@
 from guacamole import Command
 
+from mpg.launcher.pod import MPGPod
 
 class MPGApplication(Command):
     def invoked(self, ctx):
         print('application subcommand is called.')
-
-
-class MPGPod(Command):
-    def invoked(self, ctx):
-        print("pod subcommand is called.")
 
 
 class MPG(Command):
