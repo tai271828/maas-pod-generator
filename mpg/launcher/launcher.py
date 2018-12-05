@@ -4,6 +4,9 @@ from guacamole import Command
 _ = gettext.gettext
 
 class Launcher(Command):
+
+    name = 'launcher'
+
     def register_arguments(self, parser):
         parser.add_argument(
             'launcher', nargs='?',
