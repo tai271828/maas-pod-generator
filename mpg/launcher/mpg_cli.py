@@ -66,8 +66,6 @@ class LauncherIngredient(Ingredient):
 
         context.cmd_toplevel.launcher = launcher
 
-        print('LauncherIngredient is called. {}'.format(context))
-
 
 class MPGCommandRecipe(CommandRecipe):
 

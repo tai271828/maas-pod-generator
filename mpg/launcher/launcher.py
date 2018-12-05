@@ -12,5 +12,5 @@ class Launcher(Command):
             'launcher', nargs='?',
             help=_("Launcher definition file to use"))
     def invoked(self, ctx):
-        print("mpg-cli launcher subcommand is called.")
-        print("The launcher is creating {}".format(ctx.args.launcher))
+        self.launcher = ctx.cmd_toplevel.launcher
+        print("The launcher is created by {}".format(ctx.args.launcher))
