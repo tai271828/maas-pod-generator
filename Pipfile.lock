@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "71aef78f0bff505e7d1894347ba1c989279a3aaabdb4a8a79395c02a342cf7e7"
+            "sha256": "48c4e7f27c9cf54ef5796072ff35b8bbfe0df8c978043bb7eedef4458babc3ab"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -23,6 +23,14 @@
             ],
             "index": "pypi",
             "version": "==0.9.2"
+        },
+        "libvirt-python": {
+            "hashes": [
+                "sha256:6949fa09d5e3a2a03438c1334c2ed441f502222c7f21e654620f466593bcd185",
+                "sha256:7755fbf7388383888d3be7fe31126fc50b1be635d13a70c756b6a5c4655cf1f8"
+            ],
+            "index": "pypi",
+            "version": "==4.10.0"
         },
         "python-libmaas": {
             "git": "https://github.com/maas/python-libmaas.git",

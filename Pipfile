@@ -9,6 +9,7 @@ ipython = "*"
 [packages]
 guacamole = "*"
 python-libmaas = {git = "https://github.com/maas/python-libmaas.git"}
+libvirt-python = "*"
 
 [requires]
 python_version = "3.6"

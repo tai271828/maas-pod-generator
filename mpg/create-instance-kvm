@@ -4,7 +4,7 @@ import libvirt
 from libvirt import libvirtError
 xmlconfig = """
 <domain type='kvm' id='1'>
-    <name>ubuntu-16.04.1-desktop-unattended</name>
+    <name>mpg-kvm-prototy</name>
     <memory unit='KiB'>1048576</memory>
     <currentMemory unit='KiB'>1048576</currentMemory>
     <vcpu placement='static'>1</vcpu>
