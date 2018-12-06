@@ -1,0 +1,18 @@
+<pool type='dir'>
+  <name>mpg-volume-pool</name>
+  <uuid>8c79f996-cb2a-d24d-9822-ac7547ab2d01</uuid>
+  <capacity unit='bytes'>4306780815</capacity>
+  <allocation unit='bytes'>237457858</allocation>
+  <available unit='bytes'>4069322956</available>
+  <source>
+  </source>
+  <target>
+    <path>/home/ubuntu/mpg-pool</path>
+    <permissions>
+      <mode>0755</mode>
+      <owner>-1</owner>
+      <group>-1</group>
+    </permissions>
+  </target>
+</pool>
+
