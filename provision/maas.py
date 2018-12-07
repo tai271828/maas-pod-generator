@@ -28,22 +28,54 @@ class MaaS(object):
                             username=self.conf.username,
                             password=self.conf.password)
 
+        self.pool = None
+
     def _read_conf(self, conf):
         return MaaSConfig(conf)
 
     def _read_kvm_xml_template(self, file_path):
         return ET.parse(file_path)
 
-    def _create_pool(self, uuid_string=None,
+    def _create_pool(self, conn,
+                     uuid_string=None,
                      name='mpg-volume-pool',
                      path='/home/ubuntu/mpg-pool'):
         if not uuid_string:
-            uuid_string = (uuid.uuid4())
+            uuid_string = str(uuid.uuid4())
+        tree_uuid = self.kptree.find('uuid')
+        tree_uuid.text = uuid_string
+
+        tree_name = self.kptree.find('name')
+        tree_name.text = name
+        tree_target = self.kptree.find('target')
+        tree_target_path = tree_target.find('path')
+        tree_target_path.text = path
 
         xml_string_pool = ET.tostring(self.kptree_root,
                                       encoding='unicode',
                                       method='xml')
-        pass
+
+        self.pool = conn.storagePoolDefineXML(xml_string_pool)
+        self.pool.setAutostart(1)
+        self.pool.create()
+
+    def _create_volume(self,
+                       name='volume.img',
+                       capacity=20,
+                       path='/home/ubuntu/mpg-pool/volume.img'):
+        tree_name = self.kvtree.find('name')
+        tree_name.text = name
+        tree_target = self.kvtree.find('target')
+        tree_target_path = tree_target.find('path')
+        tree_target_path.text = path
+        tree_capacity = self.kvtree.find('capacity')
+        tree_capacity.text = str(capacity)
+
+        xml_string_volume = ET.tostring(self.kvtree_root,
+                                        encoding='unicode',
+                                        method='xml')
+
+        self.pool.createXML(xml_string_volume, 0)
 
     def create_node(self, mode="kvm", memory=1024, disk=20):
         statement = "Create a {} node with memory {} MB and disk size {} G"
@@ -53,41 +85,26 @@ class MaaS(object):
         if conn == None:
             print("CRITICAL: Failed to connect to the hypervizor")
 
-        self._create_pool()
-
-
-        xml_string_volume = ET.tostring(self.kvtree_root,
-                                        encoding='unicode',
-                                        method='xml')
-
-        pool = conn.storagePoolDefineXML(xml_string_pool)
-        pool.setAutostart(1)
-        pool.create()
-
-        pool.createXML(xml_string_volume, 0)
+        self._create_pool(conn)
+        self._create_volume(conn)
 
         xml_string = ET.tostring(self.ktree_root,
                                  encoding='unicode',
                                  method='xml')
 
-        #instance = conn.defineXML(xml_string)
-        #if instance == None:
-        #    print("CRITICAL: Failed to define the instance")
+        instance = conn.defineXML(xml_string)
+        if instance == None:
+            print("CRITICAL: Failed to define the instance")
 
-        #instances = conn.listDefinedDomains()
-        #print('Defined instances: {}'.format(instances))
+        instances = conn.listDefinedDomains()
+        print('Defined instances: {}'.format(instances))
 
-        #instance.create()
+        instance.create()
         print("Creating a domain instance.")
         print("Created a domain instance.")
 
-        print("Try to get the ethernet IP of the guest os")
-
     def create_nodes(self, mode="kvm", pool="cluster"):
         print("Create {} {}".format(mode, pool))
-
-    def create_kvm_pool(self, conn):
-        pass
 
     def set_power_type_workaround(self,
                                   system_id,

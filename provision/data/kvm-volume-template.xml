@@ -1,9 +1,10 @@
+<?xml version="1.0"?>
 <volume>
-  <name>volumn.img</name>
+  <name>volume-default.img</name>
   <allocation>0</allocation>
-  <capacity unit="G">20</capacity>
+  <capacity unit="G">10</capacity>
   <target>
-    <path>/home/ubuntu/mpg-pool/volumn.img</path>
+    <path>/home/ubuntu/mpg-pool/volume-default.img</path>
     <permissions>
       <owner>107</owner>
       <group>107</group>

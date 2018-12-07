@@ -1,5 +1,6 @@
+<?xml version="1.0"?>
 <pool type='dir'>
-  <name>mpg-volume-pool</name>
+  <name>mpg-volume-pool-default-name</name>
   <uuid>8c79f996-cb2a-d24d-9822-ac7547ab2d01</uuid>
   <capacity unit='bytes'>4306780815</capacity>
   <allocation unit='bytes'>237457858</allocation>
@@ -7,7 +8,7 @@
   <source>
   </source>
   <target>
-    <path>/home/ubuntu/mpg-pool</path>
+    <path>/home/ubuntu/mpg-pool-default</path>
     <permissions>
       <mode>0755</mode>
       <owner>-1</owner>
