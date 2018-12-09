@@ -1,5 +1,4 @@
 import os
-import random
 import subprocess
 import uuid
 import libvirt
@@ -35,6 +34,7 @@ class MaaS(object):
 
         self.conn = conn
         self.pool = None
+        self.mac_suffix = 0
 
     def _read_conf(self, conf):
         return MaaSConfig(conf)
@@ -101,7 +101,8 @@ class MaaS(object):
 
         if not mac_address:
             fake_mac_template = "ee:dd:dd:dd:dd:{:02x}"
-            fake_mac = fake_mac_template.format(random.randint(1, 9))
+            # use pop so the mac would never duplicate
+            fake_mac = fake_mac_template.format(self.mac_suffix.pop())
             mac_address = fake_mac
         tree_devices = self.ktree.find('devices')
         tree_devices_interface = tree_devices.find('interface')
@@ -136,6 +137,7 @@ class MaaS(object):
 
     def create_nodes(self, mode="kvm", pool="cluster"):
         print("Create {} {}".format(mode, pool))
+        self.mac_suffix = list(range(1, len(self.conf.pods.keys()) + 1))
         for node_name in self.conf.pods:
             self.create_node(domain_name=node_name)
 
