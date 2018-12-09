@@ -86,7 +86,7 @@ class MaaS(object):
             print("CRITICAL: Failed to connect to the hypervizor")
 
         self._create_pool(conn)
-        self._create_volume(conn)
+        self._create_volume()
 
         xml_string = ET.tostring(self.ktree_root,
                                  encoding='unicode',
