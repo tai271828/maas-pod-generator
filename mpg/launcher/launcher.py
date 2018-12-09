@@ -22,10 +22,16 @@ class Launcher(Command):
 
     def invoked(self, ctx):
         self.launcher = ctx.cmd_toplevel.launcher
-        self.provision = provision.maas.MaaS(self.launcher.config_yaml['maas'])
-        if 'pool' in self.launcher.config_yaml:
+        config_yaml = self.launcher.config_yaml['maas']
+        self.provision = provision.maas.MaaS(config_yaml)
+
+        self.provision.create_pool()
+        if 'pods' in config_yaml:
             self.provision.create_nodes()
         else:
             self.provision.create_node()
         print("The launcher is created by {}".format(ctx.args.launcher))
         print("The config content is \n{}".format(self.launcher.config_yaml))
+
+        self.provision.create_pod()
+        print("Creating the pod...")
