@@ -90,14 +90,23 @@ class MaaS(object):
                     uuid_string=None, mac_address=None,
                     domain_name="mpg-kvm-prototype",
                     disk_source_dir="/home/ubuntu/mpg-pool/",
-                    memory=1024, disk=20):
+                    memory=2097152, disk=20):
         statement = "Create a {} node with memory {} MB and disk size {} G"
         print(statement.format(mode, memory, disk))
+
+        self._create_volume(name=domain_name + '.img')
 
         if not uuid_string:
             uuid_string = str(uuid.uuid4())
         tree_uuid = self.ktree.find('uuid')
         tree_uuid.text = uuid_string
+
+        if 'ram' in self.conf.pods[domain_name]:
+            memory = self.conf.pods[domain_name]['ram']
+        tree_memory = self.ktree.find('memory')
+        tree_memory.text = str(memory)
+        tree_current_memory = self.ktree.find('currentMemory')
+        tree_current_memory.text = str(memory)
 
         if not mac_address:
             fake_mac_template = "ee:dd:dd:dd:dd:{:02x}"
@@ -117,8 +126,6 @@ class MaaS(object):
 
         tree_name = self.ktree.find('name')
         tree_name.text = domain_name
-
-        self._create_volume(name=domain_name + '.img')
 
         xml_string = ET.tostring(self.ktree_root,
                                  encoding='unicode',
