@@ -35,3 +35,6 @@ class Launcher(Command):
 
         self.provision.create_pod()
         print("Creating the pod...")
+
+        self.provision.update_interface()
+        print("Updating the interface of the nodes of the pod...")

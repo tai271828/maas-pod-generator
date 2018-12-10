@@ -2,8 +2,10 @@ import os
 import subprocess
 import uuid
 import libvirt
+import time
 import xml.etree.ElementTree as ET
 from maas.client import login
+from maas.client.enum import LinkMode
 from provision import get_provision_pkg_dir
 
 
@@ -163,6 +165,38 @@ class MaaS(object):
         process = subprocess.run(shell_cmd)
 
         return process
+
+    def _fetch_machines(self):
+        mpg_machines = []
+        for machine in self.client.machines.list():
+            if 'mpg-' in machine.hostname:
+                mpg_machines.append(machine)
+
+        assert len(mpg_machines) > 0
+
+        return mpg_machines
+
+    def update_interface(self, link_type='dhcp'):
+        mpg_machines_ready = []
+        timeout_cnt = 0
+        mpg_machines = self._fetch_machines()
+        while len(mpg_machines_ready) != len(mpg_machines):
+            time.sleep(10)
+            mpg_machines = self._fetch_machines()
+            for mpg_machine in mpg_machines:
+                if mpg_machine.status.name == 'READY':
+                    mpg_machines_ready.append(mpg_machine)
+            if len(mpg_machines_ready) != len(mpg_machines):
+                mpg_machines_ready = []
+            if timeout_cnt > 30:
+                return
+            timeout_cnt += 1
+
+        for mpg_machine in mpg_machines_ready:
+            ml = mpg_machine.interfaces[0].links
+            if link_type == 'dhcp':
+                ml.create(LinkMode.DHCP)
+                ml[0].delete()
 
     def set_power_type(self,
                        system_id,
