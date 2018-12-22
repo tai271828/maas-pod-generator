@@ -96,7 +96,7 @@ class MaaS(object):
         statement = "Create a {} node with memory {} MB and disk size {} G"
         print(statement.format(mode, memory, disk))
 
-        self._create_volume(name=domain_name + '.img')
+        self._create_volume(name=domain_name + '.img', capacity=disk)
 
         if not uuid_string:
             uuid_string = str(uuid.uuid4())
@@ -140,6 +140,7 @@ class MaaS(object):
         instances = self.conn.listDefinedDomains()
         print('Defined instances: {}'.format(instances))
 
+        # we delegate the task to MaaS POD
         # instance.create()
         # print("Creating a domain instance.")
         # print("Created a domain instance.")
@@ -148,7 +149,13 @@ class MaaS(object):
         print("Create {} {}".format(mode, pool))
         self.mac_suffix = list(range(1, len(self.conf.pods.keys()) + 1))
         for node_name in self.conf.pods:
-            self.create_node(domain_name=node_name)
+            node = self.conf.pods[node_name]
+            node_kwargs = {'domain_name': node_name}
+            if 'ram' in node:
+                node_kwargs['memory'] = node['ram']
+            if 'disk' in node:
+                node_kwargs['disk'] = node['disk']
+            self.create_node(**node_kwargs)
 
     def create_pod(self,
                    pod_name='mpg-pod',
