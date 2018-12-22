@@ -12,7 +12,7 @@ from provision import get_provision_pkg_dir
 class MaaS(object):
 
     DATA_ROOT = os.path.join(get_provision_pkg_dir(), 'data')
-    KVM_XML_TEMPLATE_PATH = os.path.join(DATA_ROOT, 'kvm-template.xml')
+    KVM_XML_TEMPLATE_PATH = os.path.join(DATA_ROOT, 'kvm-domain-template.xml')
     KVM_POOL_XML_PATH = os.path.join(DATA_ROOT, 'kvm-pool.xml')
     KVM_VOL_XML_TEMP_PATH = os.path.join(DATA_ROOT,
                                          'kvm-volume-template.xml')
