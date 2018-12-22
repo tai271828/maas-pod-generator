@@ -173,6 +173,20 @@ class MaaS(object):
 
         return process
 
+    def deploy_node(self, node_name, distro):
+        for machine in self.client.machines.list():
+            if machine.hostname == node_name:
+                print('Node {} is specified to deploy {}'.format(node_name,
+                                                                 distro))
+                machine.deploy(distro_series=distro)
+
+    def deploy_nodes(self):
+        # deploy the node if the field "distro" is present
+        for node_name in self.conf.pods:
+            node = self.conf.pods[node_name]
+            if 'distro' in node:
+                self.deploy_node(node_name, node['distro'])
+
     def _fetch_machines(self):
         mpg_machines = []
         for machine in self.client.machines.list():

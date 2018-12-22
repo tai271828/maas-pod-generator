@@ -33,8 +33,12 @@ class Launcher(Command):
         print("The launcher is created by {}".format(ctx.args.launcher))
         print("The config content is \n{}".format(self.launcher.config_yaml))
 
-        self.provision.create_pod()
         print("Creating the pod...")
+        self.provision.create_pod()
 
-        self.provision.update_interface()
         print("Updating the interface of the nodes of the pod...")
+        self.provision.update_interface()
+
+        print("Deploying the nodes")
+        self.provision.deploy_nodes()
+        print("All known nodes specified distro are deployed.")
